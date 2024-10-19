@@ -1,5 +1,5 @@
 ---
-  name: Publish Core Image
+  name: Publish Core24 Images
   
   on:
     push:
@@ -15,7 +15,7 @@
       runs-on: ubuntu-latest
       strategy:
         matrix:
-          ubuntu_version: [24.04, 24.10]
+          ubuntu_version: ["24.04", "24.10"]
   
       steps:
   
