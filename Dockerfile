@@ -56,7 +56,7 @@ RUN flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flath
 RUN rm -rf /var/lib/apt/lists/* /var/log/alternatives.log /var/log/apt/history.log /var/log/apt/term.log /var/log/dpkg.log /etc/machine-id /var/lib/dbus/machine-id
 
 #configure plymouth and hosts
-COPY --from=plymouth-builder /usr/share/plymouth/themes/* /usr/share/plymouth/themes/
+COPY --from=plymouth-builder /usr/share/plymouth/themes/soyuz-bgrt/* /usr/share/plymouth/themes/soyuz-bgrt/
 
 RUN <<-EOT
     update-alternatives --install /usr/share/plymouth/themes/default.plymouth default.plymouth /usr/share/plymouth/themes/soyuz-bgrt/soyuz-bgrt.plymouth 200 
