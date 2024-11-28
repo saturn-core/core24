@@ -1,5 +1,5 @@
 ---
-  name: Publish Core24 Images
+  name: Publish Core24 Image
   
   on:
     push:
@@ -13,9 +13,6 @@
     release-core:
       name: build image
       runs-on: ubuntu-latest
-      strategy:
-        matrix:
-          ubuntu_version: ["24.04", "24.10"]
   
       steps:
   
@@ -38,13 +35,8 @@
           id: meta
           uses: docker/metadata-action@v5
           with:
-            images: |
-              ghcr.io/${{ github.repository }}
-            flavor: |
-              latest=false
-            tags: |
-              type=raw,value=${{ matrix.ubuntu_version }}
-  
+            images: ghcr.io/${{ github.repository }}
+
         - name: Build and push
           uses: docker/build-push-action@v6
           with:
@@ -56,6 +48,4 @@
             push: true
             tags: ${{ steps.meta.outputs.tags }}
             labels: ${{ steps.meta.outputs.labels }}
-            platforms: linux/amd64
-            build-args: |
-              UBUNTU_RELEASE=${{ matrix.ubuntu_version }}
+            platforms: linux/amd64,linux/arm64

@@ -1,6 +1,5 @@
-# Use the specified Ubuntu release as the base image
-ARG UBUNTU_RELEASE=24.10
-FROM ubuntu:${UBUNTU_RELEASE} AS base
+# Use Ubuntu 24.04 LTS release as the base image
+FROM ubuntu:24.04 AS base
 
 
 FROM base AS plymouth-builder
