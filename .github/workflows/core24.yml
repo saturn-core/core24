@@ -1,0 +1,50 @@
+---
+    name: Publish core24
+    
+    on:
+      schedule:
+        - cron: '0 2 * * 0'
+      push:
+        paths:
+          - 'core24'
+        branches:
+          - latest
+      workflow_dispatch:
+    
+    jobs:
+      release-core24:
+        runs-on: ubuntu-latest
+    
+        steps:
+          - uses: actions/checkout@v4
+
+          - name: Generate metadata
+            id: meta
+            uses: docker/metadata-action@v5
+            with:
+              images: ghcr.io/${{ github.repository }}
+              labels: |
+                org.opencontainers.image.title=core24
+                org.opencontainers.image.vendor=saturn-core
+                org.opencontainers.image.description=Base image for Saturn using ubuntu's 24.04 release
+                org.opencontainers.image.authors=saturn-core
+                org.opencontainers.image.license=GPL-3.0+
+
+          - name: Buildah Build
+            id: build-image
+            uses: redhat-actions/buildah-build@v2
+            with:
+              containerfiles: |
+                ./core24
+              oci: true
+              tags: ${{ steps.meta.outputs.tags }}
+              labels: ${{ steps.meta.outputs.labels }}
+
+          - name: Push to Github Registry
+            id: push-image
+            uses: redhat-actions/push-to-registry@v2
+            with:
+              image: ${{ steps.build-image.outputs.image }}
+              tags: ${{ steps.build-image.outputs.tags }}
+              username: ${{ github.repository_owner }}
+              password: ${{ secrets.GITHUB_TOKEN }}
